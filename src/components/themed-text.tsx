@@ -1,10 +1,21 @@
 import { Platform, StyleSheet, Text, type TextProps } from 'react-native';
 
-import { Fonts, ThemeColor } from '@/constants/theme';
+import { Fonts, FontFamily, ThemeColor } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
-  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code';
+  type?:
+    | 'default'
+    | 'bodyMedium'
+    | 'title'
+    | 'heading'
+    | 'small'
+    | 'smallBold'
+    | 'label'
+    | 'subtitle'
+    | 'link'
+    | 'linkPrimary'
+    | 'code';
   themeColor?: ThemeColor;
 };
 
@@ -16,9 +27,12 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
       style={[
         { color: theme[themeColor ?? 'text'] },
         type === 'default' && styles.default,
+        type === 'bodyMedium' && styles.bodyMedium,
         type === 'title' && styles.title,
+        type === 'heading' && styles.heading,
         type === 'small' && styles.small,
         type === 'smallBold' && styles.smallBold,
+        type === 'label' && styles.label,
         type === 'subtitle' && styles.subtitle,
         type === 'link' && styles.link,
         type === 'linkPrimary' && styles.linkPrimary,
@@ -32,38 +46,56 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
 
 const styles = StyleSheet.create({
   small: {
+    fontFamily: FontFamily.body,
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: 500,
   },
   smallBold: {
+    fontFamily: FontFamily.bodySemiBold,
     fontSize: 14,
     lineHeight: 20,
-    fontWeight: 700,
+  },
+  label: {
+    fontFamily: FontFamily.bodySemiBold,
+    fontSize: 12,
+    lineHeight: 16,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
   },
   default: {
+    fontFamily: FontFamily.body,
     fontSize: 16,
     lineHeight: 24,
-    fontWeight: 500,
+  },
+  bodyMedium: {
+    fontFamily: FontFamily.bodyMedium,
+    fontSize: 16,
+    lineHeight: 24,
   },
   title: {
-    fontSize: 48,
-    fontWeight: 600,
-    lineHeight: 52,
+    fontFamily: FontFamily.displayBold,
+    fontSize: 34,
+    lineHeight: 40,
+  },
+  heading: {
+    fontFamily: FontFamily.displaySemiBold,
+    fontSize: 22,
+    lineHeight: 28,
   },
   subtitle: {
-    fontSize: 32,
-    lineHeight: 44,
-    fontWeight: 600,
+    fontFamily: FontFamily.displaySemiBold,
+    fontSize: 18,
+    lineHeight: 24,
   },
   link: {
-    lineHeight: 30,
+    fontFamily: FontFamily.bodyMedium,
+    lineHeight: 22,
     fontSize: 14,
   },
   linkPrimary: {
-    lineHeight: 30,
+    fontFamily: FontFamily.bodySemiBold,
+    lineHeight: 22,
     fontSize: 14,
-    color: '#3c87f7',
   },
   code: {
     fontFamily: Fonts.mono,
