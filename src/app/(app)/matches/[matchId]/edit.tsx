@@ -273,7 +273,7 @@ export default function EditMatchScreen() {
             </View>
           ))}
           {errors.sets ? (
-            <ThemedText type="small" themeColor="loss">
+            <ThemedText type="small" themeColor="danger">
               {errors.sets.message}
             </ThemedText>
           ) : null}
@@ -300,7 +300,7 @@ export default function EditMatchScreen() {
         />
 
         {error ? (
-          <ThemedText type="small" themeColor="loss">
+          <ThemedText type="small" themeColor="danger">
             {error}
           </ThemedText>
         ) : null}

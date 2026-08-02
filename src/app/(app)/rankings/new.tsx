@@ -14,13 +14,15 @@ import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { OptionSheetField } from '@/components/ui/option-sheet';
 import { TextField } from '@/components/ui/text-field';
-import { Colors, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { surfaceFormOptions, surfaceLabels } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
 import { formatDate } from '@/lib/date';
 import { useCreateRanking, useDeleteRanking, useRankings } from '@/queries/use-rankings';
 import { RankingFormValues, rankingFormSchema } from '@/schemas/ranking';
 
 export default function NewRankingScreen() {
+  const theme = useTheme();
   const rankings = useRankings();
   const createRanking = useCreateRanking();
   const deleteRanking = useDeleteRanking();
@@ -97,7 +99,7 @@ export default function NewRankingScreen() {
         />
 
         {error ? (
-          <ThemedText type="small" themeColor="loss">
+          <ThemedText type="small" themeColor="danger">
             {error}
           </ThemedText>
         ) : null}
@@ -123,7 +125,7 @@ export default function NewRankingScreen() {
                   </ThemedText>
                 </View>
                 <Pressable onPress={() => handleDelete(ranking.id, ranking.name)} hitSlop={8}>
-                  <Trash2 size={18} color={Colors.light.loss} />
+                  <Trash2 size={18} color={theme.danger} />
                 </Pressable>
               </Pressable>
             ))}

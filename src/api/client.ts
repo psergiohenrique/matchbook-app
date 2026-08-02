@@ -1,4 +1,5 @@
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'https://matchbook-production.up.railway.app';
+const REQUEST_TIMEOUT_MS = 15000;
 
 export class ApiError extends Error {
   constructor(
@@ -12,14 +13,28 @@ export class ApiError extends Error {
 }
 
 export async function request<T>(path: string, token: string | null, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_URL}${path}`, {
-    ...init,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(init?.headers ?? {}),
-    },
-  });
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let response: Response;
+  try {
+    response = await fetch(`${API_URL}${path}`, {
+      ...init,
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(init?.headers ?? {}),
+      },
+    });
+  } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') {
+      throw new ApiError(0, 'TIMEOUT', 'A requisição demorou demais para responder.');
+    }
+    throw new ApiError(0, 'NETWORK_ERROR', 'Não foi possível conectar ao servidor.');
+  } finally {
+    clearTimeout(timeout);
+  }
 
   if (!response.ok) {
     let code = 'HTTP_ERROR';

@@ -10,14 +10,16 @@ import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pill } from '@/components/ui/pill';
-import { Colors, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { handednessLabels, playStyleLabels, surfaceLabels, surfaceOptions } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
 import { formatDate } from '@/lib/date';
 import { useDeleteOpponentProfile, useOpponentHistory } from '@/queries/use-opponents';
 import { useUiStore } from '@/store/ui-store';
 import type { Surface } from '@/types/api';
 
 export default function OpponentHistoryScreen() {
+  const theme = useTheme();
   const { opponentId } = useLocalSearchParams<{ opponentId: string }>();
   const surfaceFilter = useUiStore((state) => state.selectedSurfaceFilter);
   const setSurfaceFilter = useUiStore((state) => state.setSurfaceFilter);
@@ -57,10 +59,10 @@ export default function OpponentHistoryScreen() {
           headerRight: () => (
             <View style={styles.headerActions}>
               <Pressable onPress={() => router.push(`/opponents/${opponentId}/edit`)} hitSlop={8}>
-                <Pencil size={20} color={Colors.light.text} />
+                <Pencil size={20} color={theme.text} />
               </Pressable>
               <Pressable onPress={handleDelete} hitSlop={8}>
-                <Trash2 size={20} color={Colors.light.loss} />
+                <Trash2 size={20} color={theme.danger} />
               </Pressable>
             </View>
           ),
@@ -71,7 +73,7 @@ export default function OpponentHistoryScreen() {
       {data ? (
         <>
           <Card variant="dark">
-            <ThemedText type="title" style={styles.opponentName}>
+            <ThemedText type="title" style={[styles.opponentName, { color: theme.heroText }]}>
               {data.opponent.name}
             </ThemedText>
             <View style={styles.pillRow}>
@@ -80,7 +82,7 @@ export default function OpponentHistoryScreen() {
             </View>
             {data.opponent.strengths.length > 0 ? (
               <View>
-                <ThemedText type="label" style={styles.darkLabel}>
+                <ThemedText type="label" style={{ color: theme.heroSub }}>
                   Pontos fortes
                 </ThemedText>
                 <View style={styles.pillRow}>
@@ -92,7 +94,7 @@ export default function OpponentHistoryScreen() {
             ) : null}
             {data.opponent.weaknesses.length > 0 ? (
               <View>
-                <ThemedText type="label" style={styles.darkLabel}>
+                <ThemedText type="label" style={{ color: theme.heroSub }}>
                   Pontos fracos
                 </ThemedText>
                 <View style={styles.pillRow}>
@@ -103,7 +105,7 @@ export default function OpponentHistoryScreen() {
               </View>
             ) : null}
             {data.opponent.notes ? (
-              <ThemedText type="small" style={styles.darkLabel}>
+              <ThemedText type="small" style={{ color: theme.heroSub }}>
                 {data.opponent.notes}
               </ThemedText>
             ) : null}
@@ -172,12 +174,8 @@ const styles = StyleSheet.create({
     marginRight: Spacing.one,
   },
   opponentName: {
-    color: '#fff8eb',
     fontSize: 26,
     lineHeight: 32,
-  },
-  darkLabel: {
-    color: 'rgba(255, 248, 235, 0.75)',
   },
   pillRow: {
     flexDirection: 'row',

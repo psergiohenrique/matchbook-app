@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, FontFamily, Radius, Spacing } from '@/constants/theme';
+import { FontFamily, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 type TagInputProps = {
@@ -45,7 +45,7 @@ export function TagInput({ label, value, onChange, placeholder = 'Adicionar e pr
           <View key={`${tag}-${index}`} style={[styles.chip, { backgroundColor: theme.card }]}>
             <ThemedText type="small">{tag}</ThemedText>
             <Pressable hitSlop={8} onPress={() => removeAt(index)}>
-              <X size={14} color={Colors.light.textSecondary} />
+              <X size={14} color={theme.textSecondary} />
             </Pressable>
           </View>
         ))}

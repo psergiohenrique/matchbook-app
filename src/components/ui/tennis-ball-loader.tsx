@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Circle, Path } from 'react-native-svg';
 
-import { Colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type TennisBallLoaderProps = {
   size?: number;
@@ -21,7 +21,9 @@ type TennisBallLoaderProps = {
  * Brand loading spinner, ported from matchbook-old's CSS `tennis-bounce` keyframe
  * (squash-and-stretch bounce) using react-native-reanimated instead of CSS keyframes.
  */
-export function TennisBallLoader({ size = 32, color = Colors.light.ballGreen }: TennisBallLoaderProps) {
+export function TennisBallLoader({ size = 32, color }: TennisBallLoaderProps) {
+  const theme = useTheme();
+  const fill = color ?? theme.accent;
   const translateY = useSharedValue(0);
   const scaleX = useSharedValue(1);
   const scaleY = useSharedValue(1);
@@ -67,16 +69,16 @@ export function TennisBallLoader({ size = 32, color = Colors.light.ballGreen }: 
     <View style={[styles.container, { width: size, height: size * 1.5 }]}>
       <Animated.View style={animatedStyle}>
         <Svg width={size} height={size} viewBox="0 0 24 24">
-          <Circle cx={12} cy={12} r={10} fill={color} />
+          <Circle cx={12} cy={12} r={10} fill={fill} />
           <Path
             d="M 6.5 3.5 C 14 8, 14 16, 6.5 20.5"
-            stroke="#f8f5eb"
+            stroke="#FAF8F2"
             strokeWidth={1.4}
             fill="none"
           />
           <Path
             d="M 17.5 3.5 C 10 8, 10 16, 17.5 20.5"
-            stroke="#f8f5eb"
+            stroke="#FAF8F2"
             strokeWidth={1.4}
             fill="none"
           />

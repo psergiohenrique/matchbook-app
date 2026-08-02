@@ -3,38 +3,65 @@ import '@/global.css';
 import { Platform } from 'react-native';
 
 /**
- * "Premium tennis club" palette ported from matchbook-old (app/globals.css + inline tokens).
- * The old web app has no dark mode, so dark is aliased to light rather than inventing an
- * undesigned theme this pass — see app.json's userInterfaceStyle:"light".
+ * "Court redesign" palette — deep forest green + terracotta accent + tennis-ball lime,
+ * ported from the Matchbook Tennis Claude Design mockup. Both light and dark are real,
+ * independent palettes (see providers/theme-provider.tsx for the manual toggle).
  */
-const palette = {
-  text: '#12231d',
-  textSecondary: '#64748b',
-  background: '#f8f5eb',
-  backgroundElement: '#f5efe0',
-  backgroundSelected: '#fdfaf1',
-  card: '#ffffff',
-  border: 'rgba(18, 35, 29, 0.08)',
+const light = {
+  text: '#152A21',
+  textSecondary: '#5B6B62',
+  background: '#FAF8F2',
+  backgroundElement: '#F1EEE3',
+  backgroundSelected: '#F1EEE3',
+  card: '#FFFFFF',
+  border: '#E7E2D3',
+  placeholder: '#96A199',
 
-  forestDeep: '#10271f',
-  forestMid: '#16302b',
-  forestPanel: '#12372d',
-  slateDark: '#0f172a',
+  hero: '#123C2E',
+  heroText: '#FAF8F2',
+  heroSub: 'rgba(250, 248, 242, 0.75)',
+  navInactive: 'rgba(250, 248, 242, 0.55)',
 
-  gold: '#f7d56b',
-  goldForeground: '#3d2c05',
-  ballGreen: '#cce000',
-  cream: '#fff8eb',
+  accent: '#E1592C',
+  accentText: '#FFFFFF',
+  lime: '#CFE83A',
+  limeText: '#12241D',
 
-  win: '#059669',
-  winBackground: '#d1fae5',
-  loss: '#e11d48',
-  lossBackground: '#ffe4e6',
+  toastBg: '#FFFFFF',
+  toastBorder: '#4C9A6A',
+  success: '#4C9A6A',
+  danger: '#D64545',
+} as const;
+
+const dark = {
+  text: '#F4F1E7',
+  textSecondary: '#A9B8AE',
+  background: '#0D1F19',
+  backgroundElement: '#1E3B32',
+  backgroundSelected: '#1E3B32',
+  card: '#16302A',
+  border: '#274038',
+  placeholder: '#7C8C82',
+
+  hero: '#0A1F18',
+  heroText: '#F4F1E7',
+  heroSub: 'rgba(244, 241, 231, 0.7)',
+  navInactive: 'rgba(244, 241, 231, 0.5)',
+
+  accent: '#FF6B3D',
+  accentText: '#161616',
+  lime: '#E3FF5B',
+  limeText: '#12241D',
+
+  toastBg: '#16302A',
+  toastBorder: '#7CD98E',
+  success: '#7CD98E',
+  danger: '#FF6B6B',
 } as const;
 
 export const Colors = {
-  light: palette,
-  dark: palette,
+  light,
+  dark,
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
@@ -62,13 +89,13 @@ export const Fonts = Platform.select({
 
 /** Brand typefaces, loaded via useFonts() in the root layout (@expo-google-fonts/*). */
 export const FontFamily = {
-  body: 'DMSans_400Regular',
-  bodyMedium: 'DMSans_500Medium',
-  bodySemiBold: 'DMSans_600SemiBold',
-  bodyBold: 'DMSans_700Bold',
-  display: 'SpaceGrotesk_500Medium',
-  displaySemiBold: 'SpaceGrotesk_600SemiBold',
-  displayBold: 'SpaceGrotesk_700Bold',
+  body: 'Manrope_400Regular',
+  bodyMedium: 'Manrope_500Medium',
+  bodySemiBold: 'Manrope_600SemiBold',
+  bodyBold: 'Manrope_700Bold',
+  display: 'BricolageGrotesque_500Medium',
+  displaySemiBold: 'BricolageGrotesque_600SemiBold',
+  displayBold: 'BricolageGrotesque_700Bold',
 } as const;
 
 export const Spacing = {
@@ -85,7 +112,7 @@ export const Radius = {
   sm: 12,
   md: 16,
   lg: 24,
-  xl: 28,
+  xl: 20,
   xxl: 32,
   full: 999,
 } as const;

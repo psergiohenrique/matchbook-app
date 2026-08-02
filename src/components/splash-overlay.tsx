@@ -6,7 +6,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { ThemedText } from '@/components/themed-text';
 import { TennisBallLoader } from '@/components/ui/tennis-ball-loader';
-import { Colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 const exitKeyframe = new Keyframe({
   0: { opacity: 1, transform: [{ scale: 1 }] },
@@ -19,6 +19,7 @@ type SplashOverlayProps = {
 };
 
 export function SplashOverlay({ ready }: SplashOverlayProps) {
+  const theme = useTheme();
   const [animateOut, setAnimateOut] = useState(false);
   const [visible, setVisible] = useState(true);
 
@@ -33,7 +34,7 @@ export function SplashOverlay({ ready }: SplashOverlayProps) {
   const content = (
     <View style={styles.content}>
       <TennisBallLoader size={40} />
-      <ThemedText type="title" style={styles.wordmark}>
+      <ThemedText type="title" style={{ color: theme.lime }}>
         Matchbook
       </ThemedText>
     </View>
@@ -47,18 +48,17 @@ export function SplashOverlay({ ready }: SplashOverlayProps) {
           scheduleOnRN(setVisible, false);
         }
       })}
-      style={styles.overlay}>
+      style={[styles.overlay, { backgroundColor: theme.hero }]}>
       {content}
     </Animated.View>
   ) : (
-    <View style={styles.overlay}>{content}</View>
+    <View style={[styles.overlay, { backgroundColor: theme.hero }]}>{content}</View>
   );
 }
 
 const styles = StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: Colors.light.forestDeep,
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,
@@ -66,8 +66,5 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
     gap: 12,
-  },
-  wordmark: {
-    color: Colors.light.gold,
   },
 });

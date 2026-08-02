@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type HeroHeaderProps = {
   eyebrow?: string;
@@ -12,19 +13,21 @@ type HeroHeaderProps = {
 
 /** Dark forest hero panel pattern reused across old app's dashboard/analytics/insights headers. */
 export function HeroHeader({ eyebrow, title, subtitle, action }: HeroHeaderProps) {
+  const theme = useTheme();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: theme.hero }]}>
       <View style={styles.textColumn}>
         {eyebrow ? (
-          <ThemedText type="label" style={styles.eyebrow}>
+          <ThemedText type="label" style={{ color: theme.lime }}>
             {eyebrow}
           </ThemedText>
         ) : null}
-        <ThemedText type="title" style={styles.title}>
+        <ThemedText type="title" style={[styles.title, { color: theme.heroText }]}>
           {title}
         </ThemedText>
         {subtitle ? (
-          <ThemedText type="small" style={styles.subtitle}>
+          <ThemedText type="small" style={{ color: theme.heroSub }}>
             {subtitle}
           </ThemedText>
         ) : null}
@@ -36,7 +39,6 @@ export function HeroHeader({ eyebrow, title, subtitle, action }: HeroHeaderProps
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.light.forestMid,
     borderRadius: Radius.xxl,
     padding: Spacing.four,
     flexDirection: 'row',
@@ -48,15 +50,8 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: Spacing.one,
   },
-  eyebrow: {
-    color: Colors.light.gold,
-  },
   title: {
-    color: Colors.light.cream,
     fontSize: 26,
     lineHeight: 32,
-  },
-  subtitle: {
-    color: 'rgba(255, 248, 235, 0.75)',
   },
 });

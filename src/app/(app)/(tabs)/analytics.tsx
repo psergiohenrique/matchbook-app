@@ -8,12 +8,14 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import { MetricCard, MetricRow } from '@/components/ui/metric-card';
 import { Pill } from '@/components/ui/pill';
-import { Colors, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { playStyleLabels, surfaceLabels } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
 import { formatDate, formatMonthLabel } from '@/lib/date';
 import { useAnalytics } from '@/queries/use-analytics';
 
 export default function AnalyticsScreen() {
+  const theme = useTheme();
   const analytics = useAnalytics();
   const data = analytics.data;
 
@@ -36,7 +38,7 @@ export default function AnalyticsScreen() {
             <ThemedText type="heading">Comparativo por superfície</ThemedText>
             <View style={styles.list}>
               {data.surfaceComparison.map((item) => (
-                <View key={item.surface} style={styles.row}>
+                <View key={item.surface} style={[styles.row, { borderBottomColor: theme.border }]}>
                   <View style={styles.rowText}>
                     <ThemedText type="bodyMedium">{surfaceLabels[item.surface]}</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">
@@ -63,7 +65,7 @@ export default function AnalyticsScreen() {
             ) : (
               <View style={styles.list}>
                 {data.monthlyTrend.map((item) => (
-                  <View key={item.month} style={styles.row}>
+                  <View key={item.month} style={[styles.row, { borderBottomColor: theme.border }]}>
                     <ThemedText type="bodyMedium">{formatMonthLabel(item.month)}</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">
                       {item.totalMatches} partidas · {item.winRate}%
@@ -81,7 +83,7 @@ export default function AnalyticsScreen() {
             </ThemedText>
             <View style={styles.list}>
               {data.stylePerformance.map((item) => (
-                <View key={item.style} style={styles.row}>
+                <View key={item.style} style={[styles.row, { borderBottomColor: theme.border }]}>
                   <ThemedText type="bodyMedium">
                     {playStyleLabels[item.style as keyof typeof playStyleLabels] ?? item.style}
                   </ThemedText>
@@ -100,7 +102,7 @@ export default function AnalyticsScreen() {
             ) : (
               <View style={styles.list}>
                 {data.rankingTrend.map((ranking) => (
-                  <View key={ranking.id} style={styles.row}>
+                  <View key={ranking.id} style={[styles.row, { borderBottomColor: theme.border }]}>
                     <ThemedText type="bodyMedium">{ranking.name}</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">
                       {surfaceLabels[ranking.surface]} · {formatDate(ranking.createdAt)}
@@ -113,16 +115,16 @@ export default function AnalyticsScreen() {
 
           {data.recommendations.length > 0 ? (
             <Card variant="dark">
-              <ThemedText type="heading" style={styles.darkHeading}>
+              <ThemedText type="heading" style={{ color: theme.heroText }}>
                 Recomendações
               </ThemedText>
               <View style={styles.list}>
                 {data.recommendations.map((rec) => (
                   <View key={rec.title} style={styles.recommendation}>
-                    <ThemedText type="bodyMedium" style={styles.darkHeading}>
+                    <ThemedText type="bodyMedium" style={{ color: theme.heroText }}>
                       {rec.title}
                     </ThemedText>
-                    <ThemedText type="small" style={styles.recommendationText}>
+                    <ThemedText type="small" style={{ color: theme.heroSub }}>
                       {rec.description}
                     </ThemedText>
                   </View>
@@ -147,7 +149,6 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
     paddingVertical: Spacing.two,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.light.border,
   },
   rowText: {
     flex: 1,
@@ -159,13 +160,7 @@ const styles = StyleSheet.create({
     gap: Spacing.one,
     marginTop: Spacing.one,
   },
-  darkHeading: {
-    color: Colors.light.cream,
-  },
   recommendation: {
     gap: 2,
-  },
-  recommendationText: {
-    color: 'rgba(255, 248, 235, 0.75)',
   },
 });

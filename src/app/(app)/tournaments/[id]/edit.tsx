@@ -131,7 +131,7 @@ export default function EditTournamentScreen() {
         />
 
         {error ? (
-          <ThemedText type="small" themeColor="loss">
+          <ThemedText type="small" themeColor="danger">
             {error}
           </ThemedText>
         ) : null}

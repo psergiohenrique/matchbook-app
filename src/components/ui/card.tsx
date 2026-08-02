@@ -1,6 +1,7 @@
 import { StyleSheet, View, type ViewProps } from 'react-native';
 
-import { Colors, Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type CardProps = ViewProps & {
   variant?: 'default' | 'dark' | 'flat';
@@ -8,13 +9,15 @@ type CardProps = ViewProps & {
 
 /** Rounded glassy card wrapper, ported from matchbook-old's ui/card.tsx (rounded-[28px]). */
 export function Card({ style, variant = 'default', ...rest }: CardProps) {
+  const theme = useTheme();
+
   return (
     <View
       style={[
         styles.base,
-        variant === 'default' && { backgroundColor: Colors.light.card },
-        variant === 'dark' && { backgroundColor: Colors.light.forestPanel },
-        variant === 'flat' && { backgroundColor: Colors.light.backgroundElement },
+        variant === 'default' && { backgroundColor: theme.card },
+        variant === 'dark' && { backgroundColor: theme.hero },
+        variant === 'flat' && { backgroundColor: theme.backgroundElement },
         style,
       ]}
       {...rest}

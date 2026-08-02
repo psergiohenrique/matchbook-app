@@ -10,14 +10,16 @@ import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import { Pill } from '@/components/ui/pill';
-import { Colors, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { surfaceLabels, surfaceOptions } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
 import { formatDate } from '@/lib/date';
 import { useDeleteMatch, useMatches } from '@/queries/use-matches';
 import { useUiStore } from '@/store/ui-store';
 import type { Surface } from '@/types/api';
 
 export default function MatchesListScreen() {
+  const theme = useTheme();
   const surfaceFilter = useUiStore((state) => state.selectedSurfaceFilter);
   const setSurfaceFilter = useUiStore((state) => state.setSurfaceFilter);
   const surfaceParam = surfaceFilter === 'ALL' ? undefined : (surfaceFilter as Surface);
@@ -75,7 +77,7 @@ export default function MatchesListScreen() {
                   onPress={() => handleDelete(match.id, match.opponentProfile?.id)}
                   hitSlop={8}
                   style={styles.deleteButton}>
-                  <Trash2 size={18} color={Colors.light.loss} />
+                  <Trash2 size={18} color={theme.danger} />
                 </Pressable>
               </Pressable>
             ))}

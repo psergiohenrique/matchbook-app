@@ -13,7 +13,8 @@ import { Card } from '@/components/ui/card';
 import { TextField } from '@/components/ui/text-field';
 import { ApiError } from '@/api/client';
 import { useSession } from '@/auth/session-context';
-import { Colors, Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 import { isExpoGo } from '@/lib/runtime';
 import { loginSchema, LoginFormValues, registerSchema, RegisterFormValues } from '@/schemas/auth';
 import { ScreenScroll } from '@/components/layout/screen-scroll';
@@ -30,45 +31,13 @@ type Mode = 'login' | 'register';
 
 export default function AuthScreen() {
   const [mode, setMode] = useState<Mode>('login');
+  const theme = useTheme();
 
   return (
     <KeyboardAvoidingView style={styles.flex} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScreenScroll keyboardShouldPersistTaps="handled">
-        <View style={styles.hero}>
-          <ThemedText type="label" style={styles.heroEyebrow}>
-            Matchbook Tennis
-          </ThemedText>
-          <ThemedText type="title" style={styles.heroTitle}>
-            Seu caderno de quadra para entender estilos de adversário
-          </ThemedText>
-          <ThemedText type="small" style={styles.heroSubtitle}>
-            Registre partidas, compare desempenho contra perfis diferentes e transforme suas anotações em blocos
-            objetivos de treino.
-          </ThemedText>
-          <View style={styles.heroFeatures}>
-            <View style={styles.heroFeatureCard}>
-              <Trophy size={18} color={Colors.light.gold} />
-              <ThemedText type="smallBold" style={styles.heroFeatureTitle}>
-                Leitura competitiva
-              </ThemedText>
-              <ThemedText type="small" style={styles.heroFeatureText}>
-                Separe partidas por torneio, ranking e superfície para comparar contexto e resultado.
-              </ThemedText>
-            </View>
-            <View style={styles.heroFeatureCard}>
-              <ShieldCheck size={18} color={Colors.light.gold} />
-              <ThemedText type="smallBold" style={styles.heroFeatureTitle}>
-                Autenticação segura
-              </ThemedText>
-              <ThemedText type="small" style={styles.heroFeatureText}>
-                Login por credenciais com token JWT protegido na API.
-              </ThemedText>
-            </View>
-          </View>
-        </View>
-
         <Card>
-          <View style={styles.tabSwitch}>
+          <View style={[styles.tabSwitch, { backgroundColor: theme.backgroundElement }]}>
             <ModeTab label="Entrar" active={mode === 'login'} onPress={() => setMode('login')} />
             <ModeTab label="Criar conta" active={mode === 'register'} onPress={() => setMode('register')} />
           </View>
@@ -77,6 +46,39 @@ export default function AuthScreen() {
 
           <SocialSignIn />
         </Card>
+
+        <View style={[styles.hero, { backgroundColor: theme.hero }]}>
+          <ThemedText type="label" style={{ color: theme.lime }}>
+            Matchbook Tennis
+          </ThemedText>
+          <ThemedText type="title" style={[styles.heroTitle, { color: theme.heroText }]}>
+            Seu caderno de quadra para entender estilos de adversário
+          </ThemedText>
+          <ThemedText type="small" style={{ color: theme.heroSub }}>
+            Registre partidas, compare desempenho contra perfis diferentes e transforme suas anotações em blocos
+            objetivos de treino.
+          </ThemedText>
+          <View style={styles.heroFeatures}>
+            <View style={styles.heroFeatureCard}>
+              <Trophy size={18} color={theme.lime} />
+              <ThemedText type="smallBold" style={{ color: theme.heroText }}>
+                Leitura competitiva
+              </ThemedText>
+              <ThemedText type="small" style={{ color: theme.heroSub }}>
+                Separe partidas por torneio, ranking e superfície para comparar contexto e resultado.
+              </ThemedText>
+            </View>
+            <View style={styles.heroFeatureCard}>
+              <ShieldCheck size={18} color={theme.lime} />
+              <ThemedText type="smallBold" style={{ color: theme.heroText }}>
+                Autenticação segura
+              </ThemedText>
+              <ThemedText type="small" style={{ color: theme.heroSub }}>
+                Login por credenciais com token JWT protegido na API.
+              </ThemedText>
+            </View>
+          </View>
+        </View>
       </ScreenScroll>
     </KeyboardAvoidingView>
   );
@@ -161,9 +163,11 @@ function SocialSignIn() {
 }
 
 function ModeTab({ label, active, onPress }: { label: string; active: boolean; onPress: () => void }) {
+  const theme = useTheme();
+
   return (
-    <View style={[styles.tab, active && styles.tabActive]} onTouchEnd={onPress}>
-      <ThemedText type="smallBold" style={{ color: active ? Colors.light.cream : Colors.light.textSecondary }}>
+    <View style={[styles.tab, active && { backgroundColor: theme.hero }]} onTouchEnd={onPress}>
+      <ThemedText type="smallBold" style={{ color: active ? theme.heroText : theme.textSecondary }}>
         {label}
       </ThemedText>
     </View>
@@ -233,7 +237,7 @@ function LoginForm() {
       />
 
       {error ? (
-        <ThemedText type="small" themeColor="loss">
+        <ThemedText type="small" themeColor="danger">
           {error}
         </ThemedText>
       ) : null}
@@ -326,7 +330,7 @@ function RegisterForm() {
       />
 
       {error ? (
-        <ThemedText type="small" themeColor="loss">
+        <ThemedText type="small" themeColor="danger">
           {error}
         </ThemedText>
       ) : null}
@@ -341,21 +345,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   hero: {
-    backgroundColor: Colors.light.forestDeep,
     borderRadius: Radius.xxl,
     padding: Spacing.four,
     gap: Spacing.three,
   },
-  heroEyebrow: {
-    color: Colors.light.gold,
-  },
   heroTitle: {
-    color: Colors.light.cream,
     fontSize: 28,
     lineHeight: 34,
-  },
-  heroSubtitle: {
-    color: 'rgba(255, 248, 235, 0.75)',
   },
   heroFeatures: {
     flexDirection: 'row',
@@ -370,15 +366,8 @@ const styles = StyleSheet.create({
     padding: Spacing.three,
     gap: Spacing.one,
   },
-  heroFeatureTitle: {
-    color: Colors.light.cream,
-  },
-  heroFeatureText: {
-    color: 'rgba(255, 248, 235, 0.65)',
-  },
   tabSwitch: {
     flexDirection: 'row',
-    backgroundColor: Colors.light.backgroundElement,
     borderRadius: Radius.full,
     padding: Spacing.half,
   },
@@ -387,9 +376,6 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     paddingVertical: Spacing.two,
     alignItems: 'center',
-  },
-  tabActive: {
-    backgroundColor: Colors.light.forestDeep,
   },
   form: {
     gap: Spacing.three,

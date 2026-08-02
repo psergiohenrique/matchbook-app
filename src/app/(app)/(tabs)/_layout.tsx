@@ -5,7 +5,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 const TABS = [
   { name: 'index', href: '/', label: 'Painel', Icon: LayoutDashboard },
@@ -16,12 +17,17 @@ const TABS = [
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
 
   return (
     <Tabs>
       <TabSlot style={{ flex: 1 }} />
       <TabList asChild>
-        <View style={[styles.tabList, { paddingBottom: insets.bottom + Spacing.two }]}>
+        <View
+          style={StyleSheet.flatten([
+            styles.tabList,
+            { backgroundColor: theme.hero, paddingBottom: insets.bottom + Spacing.two },
+          ])}>
           {TABS.map(({ name, href, label, Icon }) => (
             <TabTrigger key={name} name={name} href={href} asChild>
               <TabButton label={label} Icon={Icon} />
@@ -42,7 +48,8 @@ const TabButton = forwardRef<View, TabButtonProps>(function TabButton(
   { label, Icon, isFocused, ...props },
   ref,
 ) {
-  const color = isFocused ? Colors.light.gold : 'rgba(248, 245, 235, 0.6)';
+  const theme = useTheme();
+  const color = isFocused ? theme.lime : theme.navInactive;
 
   return (
     <Pressable ref={ref} {...props} style={styles.tabButton}>
@@ -57,7 +64,6 @@ const TabButton = forwardRef<View, TabButtonProps>(function TabButton(
 const styles = StyleSheet.create({
   tabList: {
     flexDirection: 'row',
-    backgroundColor: Colors.light.forestDeep,
     borderTopLeftRadius: Radius.xl,
     borderTopRightRadius: Radius.xl,
     paddingTop: Spacing.two,

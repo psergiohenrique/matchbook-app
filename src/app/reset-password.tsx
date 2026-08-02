@@ -93,7 +93,7 @@ export default function ResetPasswordScreen() {
         />
 
         {serverError ? (
-          <ThemedText type="small" themeColor="loss">
+          <ThemedText type="small" themeColor="danger">
             {serverError}
           </ThemedText>
         ) : null}

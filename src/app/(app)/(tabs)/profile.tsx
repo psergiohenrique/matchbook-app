@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
+import { Pressable, StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { ApiError } from '@/api/client';
@@ -14,6 +15,8 @@ import { LoadingState } from '@/components/ui/loading-state';
 import { OptionSheetField } from '@/components/ui/option-sheet';
 import { TextField } from '@/components/ui/text-field';
 import { handednessOptions } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
+import { useThemeScheme } from '@/providers/theme-provider';
 import { useChangePassword, useProfile, useUpdateProfile } from '@/queries/use-profile';
 import { ChangePasswordFormValues, changePasswordFormSchema, ProfileFormValues, profileFormSchema } from '@/schemas/profile';
 import type { UpdateProfileInput } from '@/types/api';
@@ -26,12 +29,41 @@ export default function ProfileScreen() {
     <ScreenScroll keyboardShouldPersistTaps="handled">
       <HeroHeader eyebrow="Perfil" title={session.user?.name ?? 'Seu perfil'} subtitle={session.user?.email} />
 
+      <AppearanceCard />
+
       {profile.isLoading ? <LoadingState /> : null}
 
       {profile.data ? <ProfileForm profile={profile.data} /> : null}
 
       <ChangePasswordForm />
     </ScreenScroll>
+  );
+}
+
+function AppearanceCard() {
+  const theme = useTheme();
+  const { scheme, toggle } = useThemeScheme();
+  const isDark = scheme === 'dark';
+
+  return (
+    <Card>
+      <View style={styles.appearanceRow}>
+        <View style={styles.appearanceText}>
+          <ThemedText type="bodyMedium">Aparência</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            {isDark ? 'Escuro' : 'Claro'}
+          </ThemedText>
+        </View>
+        <Pressable
+          onPress={toggle}
+          hitSlop={8}
+          style={[styles.track, { backgroundColor: theme.accent }]}
+          accessibilityRole="switch"
+          accessibilityState={{ checked: isDark }}>
+          <View style={[styles.knob, isDark && styles.knobActive]} />
+        </Pressable>
+      </View>
+    </Card>
   );
 }
 
@@ -210,7 +242,7 @@ function ChangePasswordForm() {
         )}
       />
       {feedback ? (
-        <ThemedText type="small" themeColor={feedback.type === 'error' ? 'loss' : 'win'}>
+        <ThemedText type="small" themeColor={feedback.type === 'error' ? 'danger' : 'success'}>
           {feedback.message}
         </ThemedText>
       ) : null}
@@ -218,3 +250,30 @@ function ChangePasswordForm() {
     </Card>
   );
 }
+
+const styles = StyleSheet.create({
+  appearanceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  appearanceText: {
+    gap: 2,
+  },
+  track: {
+    width: 44,
+    height: 26,
+    borderRadius: 999,
+    justifyContent: 'center',
+  },
+  knob: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#FFFFFF',
+    marginLeft: 3,
+  },
+  knobActive: {
+    marginLeft: 21,
+  },
+});

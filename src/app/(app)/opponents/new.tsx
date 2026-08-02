@@ -106,7 +106,7 @@ export default function NewOpponentScreen() {
         />
 
         {error ? (
-          <ThemedText type="small" themeColor="loss">
+          <ThemedText type="small" themeColor="danger">
             {error}
           </ThemedText>
         ) : null}

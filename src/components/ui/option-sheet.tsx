@@ -4,7 +4,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import { Dimensions, Pressable, StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, FontFamily, Radius, Spacing } from '@/constants/theme';
+import { FontFamily, Radius, Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type SheetOption<T extends string> = {
@@ -56,7 +56,7 @@ export function OptionSheetField<T extends string>({
           styles.trigger,
           {
             backgroundColor: theme.backgroundElement,
-            borderColor: error ? theme.loss : 'transparent',
+            borderColor: error ? theme.danger : 'transparent',
           },
           disabled && styles.disabled,
           pressed && styles.pressed,
@@ -71,7 +71,7 @@ export function OptionSheetField<T extends string>({
         <ChevronDown size={18} color={theme.textSecondary} />
       </Pressable>
       {error ? (
-        <ThemedText type="small" themeColor="loss">
+        <ThemedText type="small" themeColor="danger">
           {error}
         </ThemedText>
       ) : null}
@@ -105,7 +105,7 @@ export function OptionSheetField<T extends string>({
                   </ThemedText>
                 ) : null}
               </View>
-              {item.value === value ? <Check size={18} color={Colors.light.forestDeep} /> : null}
+              {item.value === value ? <Check size={18} color={theme.accent} /> : null}
             </Pressable>
           )}
         />

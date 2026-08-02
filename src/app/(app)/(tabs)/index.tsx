@@ -12,8 +12,9 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { LoadingState } from '@/components/ui/loading-state';
 import { MetricCard, MetricRow } from '@/components/ui/metric-card';
 import { Pill } from '@/components/ui/pill';
-import { Colors, Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing } from '@/constants/theme';
 import { playStyleLabels, surfaceLabels, surfaceOptions } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
 import { formatDate } from '@/lib/date';
 import { useDashboard } from '@/queries/use-dashboard';
 import { useOpponentProfiles } from '@/queries/use-opponents';
@@ -21,6 +22,7 @@ import { useUiStore } from '@/store/ui-store';
 import type { PlayStyle, Surface } from '@/types/api';
 
 export default function DashboardScreen() {
+  const theme = useTheme();
   const session = useSession();
   const surfaceFilter = useUiStore((state) => state.selectedSurfaceFilter);
   const styleFilter = useUiStore((state) => state.selectedStyleFilter);
@@ -48,7 +50,7 @@ export default function DashboardScreen() {
         subtitle="Acompanhe resultados, estilos de adversário e evolução de ranking."
         action={
           <Pressable onPress={() => session.signOut()} hitSlop={8} style={styles.logoutButton}>
-            <LogOut size={18} color={Colors.light.cream} />
+            <LogOut size={18} color={theme.heroText} />
           </Pressable>
         }
       />
@@ -72,7 +74,7 @@ export default function DashboardScreen() {
             <ThemedText type="heading">Por superfície</ThemedText>
             <View style={styles.breakdownGrid}>
               {Object.entries(dashboard.data.surfaceBreakdown).map(([surface, count]) => (
-                <View key={surface} style={styles.breakdownItem}>
+                <View key={surface} style={[styles.breakdownItem, { backgroundColor: theme.backgroundElement }]}>
                   <ThemedText type="bodyMedium">{surfaceLabels[surface as Surface] ?? surface}</ThemedText>
                   <ThemedText type="small" themeColor="textSecondary">
                     {count} partida{count === 1 ? '' : 's'}
@@ -124,7 +126,7 @@ export default function DashboardScreen() {
             ) : (
               <View style={styles.list}>
                 {recentMatches.map((match) => (
-                  <View key={match.id} style={styles.matchRow}>
+                  <View key={match.id} style={[styles.matchRow, { borderBottomColor: theme.border }]}>
                     <View style={styles.matchRowText}>
                       <ThemedText type="bodyMedium">{match.opponentProfile?.name ?? 'Adversário sem perfil'}</ThemedText>
                       <ThemedText type="small" themeColor="textSecondary">
@@ -145,7 +147,7 @@ export default function DashboardScreen() {
             ) : (
               <View style={styles.list}>
                 {dashboard.data.latestRankings.map((ranking) => (
-                  <View key={ranking.id} style={styles.matchRow}>
+                  <View key={ranking.id} style={[styles.matchRow, { borderBottomColor: theme.border }]}>
                     <ThemedText type="bodyMedium">{ranking.name}</ThemedText>
                     <ThemedText type="small" themeColor="textSecondary">
                       {surfaceLabels[ranking.surface]} · {formatDate(ranking.createdAt)}
@@ -164,7 +166,7 @@ export default function DashboardScreen() {
               <View style={styles.list}>
                 {opponentProfiles.data?.map((opponent) => (
                   <Link key={opponent.id} href={`/opponents/${opponent.id}`} asChild>
-                    <Pressable style={styles.matchRow}>
+                    <Pressable style={StyleSheet.flatten([styles.matchRow, { borderBottomColor: theme.border }])}>
                       <ThemedText type="bodyMedium">{opponent.name}</ThemedText>
                       <ThemedText type="small" themeColor="textSecondary">
                         {playStyleLabels[opponent.playStyle]}
@@ -194,6 +196,7 @@ function SurfaceFilterRow({ value, onChange }: { value: Surface | 'ALL'; onChang
 }
 
 function QuickActionsBar() {
+  const theme = useTheme();
   const actions = [
     { href: '/matches/new', label: 'Partida' },
     { href: '/opponents/new', label: 'Adversário' },
@@ -205,9 +208,11 @@ function QuickActionsBar() {
     <View style={styles.quickActions}>
       {actions.map((action) => (
         <Link key={action.href} href={action.href} asChild>
-          <Pressable style={styles.quickAction}>
-            <Plus size={16} color={Colors.light.forestDeep} />
-            <ThemedText type="smallBold">{action.label}</ThemedText>
+          <Pressable style={StyleSheet.flatten([styles.quickAction, { backgroundColor: theme.accent }])}>
+            <Plus size={16} color={theme.accentText} />
+            <ThemedText type="smallBold" style={{ color: theme.accentText }}>
+              {action.label}
+            </ThemedText>
           </Pressable>
         </Link>
       ))}
@@ -235,7 +240,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.one,
-    backgroundColor: Colors.light.gold,
     borderRadius: Radius.full,
     paddingHorizontal: Spacing.three,
     paddingVertical: Spacing.two,
@@ -248,7 +252,6 @@ const styles = StyleSheet.create({
   breakdownItem: {
     flexGrow: 1,
     flexBasis: '45%',
-    backgroundColor: Colors.light.backgroundElement,
     borderRadius: Radius.md,
     padding: Spacing.three,
     gap: 2,
@@ -268,7 +271,6 @@ const styles = StyleSheet.create({
     gap: Spacing.two,
     paddingVertical: Spacing.two,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: Colors.light.border,
   },
   matchRowText: {
     flex: 1,

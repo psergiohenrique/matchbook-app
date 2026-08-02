@@ -27,13 +27,13 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
       <TextInput
         ref={ref}
         multiline={multiline}
-        placeholderTextColor={theme.textSecondary}
+        placeholderTextColor={theme.placeholder}
         style={[
           styles.input,
           {
             backgroundColor: theme.backgroundElement,
             color: theme.text,
-            borderColor: error ? theme.loss : 'transparent',
+            borderColor: error ? theme.danger : 'transparent',
           },
           multiline && styles.multiline,
           style,
@@ -41,7 +41,7 @@ export const TextField = forwardRef<TextInput, TextFieldProps>(function TextFiel
         {...rest}
       />
       {error ? (
-        <ThemedText type="small" themeColor="loss">
+        <ThemedText type="small" themeColor="danger">
           {error}
         </ThemedText>
       ) : null}

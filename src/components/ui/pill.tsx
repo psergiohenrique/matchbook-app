@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 
 import { ThemedText } from '@/components/themed-text';
-import { Colors, Radius, Spacing } from '@/constants/theme';
+import { Radius, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
 type PillTone = 'neutral' | 'win' | 'loss' | 'gold';
 
@@ -10,15 +11,18 @@ type PillProps = {
   tone?: PillTone;
 };
 
-const toneStyles: Record<PillTone, { background: string; text: string }> = {
-  neutral: { background: Colors.light.backgroundElement, text: Colors.light.text },
-  win: { background: Colors.light.winBackground, text: Colors.light.win },
-  loss: { background: Colors.light.lossBackground, text: Colors.light.loss },
-  gold: { background: Colors.light.gold, text: Colors.light.goldForeground },
-};
+function getToneStyles(theme: ReturnType<typeof useTheme>): Record<PillTone, { background: string; text: string }> {
+  return {
+    neutral: { background: theme.backgroundElement, text: theme.text },
+    win: { background: theme.lime, text: theme.limeText },
+    loss: { background: theme.backgroundSelected, text: theme.textSecondary },
+    gold: { background: theme.lime, text: theme.limeText },
+  };
+}
 
 export function Pill({ label, tone = 'neutral' }: PillProps) {
-  const colors = toneStyles[tone];
+  const theme = useTheme();
+  const colors = getToneStyles(theme)[tone];
 
   return (
     <View style={[styles.pill, { backgroundColor: colors.background }]}>

@@ -14,13 +14,15 @@ import { Card } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { OptionSheetField } from '@/components/ui/option-sheet';
 import { TextField } from '@/components/ui/text-field';
-import { Colors, Spacing } from '@/constants/theme';
+import { Spacing } from '@/constants/theme';
 import { surfaceFormOptions, surfaceLabels } from '@/constants/tennis';
+import { useTheme } from '@/hooks/use-theme';
 import { formatDate } from '@/lib/date';
 import { useCreateTournament, useDeleteTournament, useTournaments } from '@/queries/use-tournaments';
 import { TournamentFormValues, tournamentFormSchema } from '@/schemas/tournament';
 
 export default function NewTournamentScreen() {
+  const theme = useTheme();
   const tournaments = useTournaments();
   const createTournament = useCreateTournament();
   const deleteTournament = useDeleteTournament();
@@ -131,7 +133,7 @@ export default function NewTournamentScreen() {
         />
 
         {error ? (
-          <ThemedText type="small" themeColor="loss">
+          <ThemedText type="small" themeColor="danger">
             {error}
           </ThemedText>
         ) : null}
@@ -157,7 +159,7 @@ export default function NewTournamentScreen() {
                   </ThemedText>
                 </View>
                 <Pressable onPress={() => handleDelete(tournament.id, tournament.name)} hitSlop={8}>
-                  <Trash2 size={18} color={Colors.light.loss} />
+                  <Trash2 size={18} color={theme.danger} />
                 </Pressable>
               </Pressable>
             ))}
