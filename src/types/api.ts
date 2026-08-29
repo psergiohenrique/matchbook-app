@@ -35,6 +35,7 @@ export type UserProfile = {
   yearsPlaying: number | null;
   heightCm: number | null;
   weightKg: number | null;
+  coachEnabled: boolean;
 };
 
 export type UpdateProfileInput = {
@@ -43,6 +44,9 @@ export type UpdateProfileInput = {
   yearsPlaying?: number | null;
   heightCm?: number | null;
   weightKg?: number | null;
+  // Omit to leave the stored value unchanged — the backend mutes rather
+  // than clears this field when it's absent from the request.
+  coachEnabled?: boolean;
 };
 
 export type OpponentProfile = {

@@ -33,6 +33,8 @@ export default function ProfileScreen() {
 
       {profile.isLoading ? <LoadingState /> : null}
 
+      {profile.data ? <CoachSettingsCard profile={profile.data} /> : null}
+
       {profile.data ? <ProfileForm profile={profile.data} /> : null}
 
       <ChangePasswordForm />
@@ -61,6 +63,42 @@ function AppearanceCard() {
           accessibilityRole="switch"
           accessibilityState={{ checked: isDark }}>
           <View style={[styles.knob, isDark && styles.knobActive]} />
+        </Pressable>
+      </View>
+    </Card>
+  );
+}
+
+function CoachSettingsCard({ profile }: { profile: NonNullable<ReturnType<typeof useProfile>['data']> }) {
+  const theme = useTheme();
+  const updateProfile = useUpdateProfile();
+  const isEnabled = profile.coachEnabled;
+
+  const handleToggle = async () => {
+    try {
+      await updateProfile.mutateAsync({ coachEnabled: !isEnabled });
+    } catch (err) {
+      Toast.show({ type: 'error', text1: err instanceof ApiError ? err.message : 'Não foi possível salvar' });
+    }
+  };
+
+  return (
+    <Card>
+      <View style={styles.appearanceRow}>
+        <View style={styles.appearanceText}>
+          <ThemedText type="bodyMedium">Coach automático</ThemedText>
+          <ThemedText type="small" themeColor="textSecondary">
+            Gera uma análise após cada partida salva
+          </ThemedText>
+        </View>
+        <Pressable
+          onPress={handleToggle}
+          disabled={updateProfile.isPending}
+          hitSlop={8}
+          style={[styles.track, { backgroundColor: theme.accent }]}
+          accessibilityRole="switch"
+          accessibilityState={{ checked: isEnabled }}>
+          <View style={[styles.knob, isEnabled && styles.knobActive]} />
         </Pressable>
       </View>
     </Card>
