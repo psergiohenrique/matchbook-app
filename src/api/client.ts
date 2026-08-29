@@ -1,3 +1,5 @@
+import { getDeviceLocale } from '@/lib/locale';
+
 const API_URL = process.env.EXPO_PUBLIC_API_URL ?? 'https://matchbook-production.up.railway.app';
 const REQUEST_TIMEOUT_MS = 15000;
 
@@ -23,6 +25,7 @@ export async function request<T>(path: string, token: string | null, init?: Requ
       signal: controller.signal,
       headers: {
         'Content-Type': 'application/json',
+        'Accept-Language': getDeviceLocale(),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
         ...(init?.headers ?? {}),
       },

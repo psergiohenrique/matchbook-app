@@ -223,3 +223,23 @@ export type AnalyticsData = {
   rankingTrend: RankingSnapshot[];
   recommendations: { title: string; description: string }[];
 };
+
+export type CoachSummaryStatus = 'NOT_STARTED' | 'GENERATING' | 'READY' | 'FAILED';
+
+export type CoachSummary = {
+  status: CoachSummaryStatus;
+  strengths?: string[];
+  weakness?: string;
+  actionItem?: string;
+  language?: string;
+  errorMessage?: string;
+};
+
+export type CoachMessageRole = 'USER' | 'ASSISTANT';
+
+export type CoachMessage = {
+  id: string;
+  role: CoachMessageRole;
+  content: string;
+  createdAt: string;
+};

@@ -10,4 +10,6 @@ export const queryKeys = {
   tournaments: () => ['tournaments'] as const,
   rankings: () => ['rankings'] as const,
   profile: () => ['profile'] as const,
+  coachSummary: (matchId: string) => ['coach-summary', matchId] as const,
+  coachMessages: (matchId: string) => ['coach-messages', matchId] as const,
 };
