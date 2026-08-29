@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 
 import { ApiError } from '@/api/client';
 import { CoachCard } from '@/components/coach/coach-card';
+import { CoachChat } from '@/components/coach/coach-chat';
 import { ScreenScroll } from '@/components/layout/screen-scroll';
 import { ThemedText } from '@/components/themed-text';
 import { Button } from '@/components/ui/button';
@@ -311,6 +312,9 @@ export default function EditMatchScreen() {
 
       <View style={styles.coachSection}>
         <CoachCard matchId={matchId} />
+      </View>
+      <View style={styles.coachSection}>
+        <CoachChat matchId={matchId} />
       </View>
     </ScreenScroll>
   );

@@ -32,3 +32,28 @@ export function useTriggerCoachGeneration(matchId: string) {
     },
   });
 }
+
+export function useCoachMessages(matchId: string) {
+  const { token, status } = useSession();
+
+  return useQuery({
+    queryKey: queryKeys.coachMessages(matchId),
+    queryFn: () => coachApi.listMessages(token!, matchId),
+    enabled: status === 'signedIn' && !!token && !!matchId,
+  });
+}
+
+export function useSendCoachMessage(matchId: string) {
+  const { token } = useSession();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (content: string) => coachApi.sendMessage(token!, matchId, content),
+    // The backend persists both the user message and the assistant reply,
+    // but only returns the reply — refetch the thread so the user's own
+    // message (already saved server-side) shows up alongside it.
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.coachMessages(matchId) });
+    },
+  });
+}
