@@ -35,6 +35,7 @@ export type UserProfile = {
   yearsPlaying: number | null;
   heightCm: number | null;
   weightKg: number | null;
+  coachEnabled: boolean;
 };
 
 export type UpdateProfileInput = {
@@ -43,6 +44,9 @@ export type UpdateProfileInput = {
   yearsPlaying?: number | null;
   heightCm?: number | null;
   weightKg?: number | null;
+  // Omit to leave the stored value unchanged — the backend mutes rather
+  // than clears this field when it's absent from the request.
+  coachEnabled?: boolean;
 };
 
 export type OpponentProfile = {
@@ -222,4 +226,24 @@ export type AnalyticsData = {
   }[];
   rankingTrend: RankingSnapshot[];
   recommendations: { title: string; description: string }[];
+};
+
+export type CoachSummaryStatus = 'NOT_STARTED' | 'GENERATING' | 'READY' | 'FAILED';
+
+export type CoachSummary = {
+  status: CoachSummaryStatus;
+  strengths?: string[];
+  weakness?: string;
+  actionItem?: string;
+  language?: string;
+  errorMessage?: string;
+};
+
+export type CoachMessageRole = 'USER' | 'ASSISTANT';
+
+export type CoachMessage = {
+  id: string;
+  role: CoachMessageRole;
+  content: string;
+  createdAt: string;
 };

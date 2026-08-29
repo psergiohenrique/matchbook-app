@@ -7,6 +7,8 @@ import { StyleSheet, View } from 'react-native';
 import Toast from 'react-native-toast-message';
 
 import { ApiError } from '@/api/client';
+import { CoachCard } from '@/components/coach/coach-card';
+import { CoachChat } from '@/components/coach/coach-chat';
 import { ScreenScroll } from '@/components/layout/screen-scroll';
 import { ThemedText } from '@/components/themed-text';
 import { Button } from '@/components/ui/button';
@@ -307,6 +309,13 @@ export default function EditMatchScreen() {
 
         <Button label="Salvar alterações" fullWidth loading={isSubmitting} onPress={handleSubmit(onSubmit)} />
       </View>
+
+      <View style={styles.coachSection}>
+        <CoachCard matchId={matchId} />
+      </View>
+      <View style={styles.coachSection}>
+        <CoachChat matchId={matchId} />
+      </View>
     </ScreenScroll>
   );
 }
@@ -314,6 +323,9 @@ export default function EditMatchScreen() {
 const styles = StyleSheet.create({
   form: {
     gap: Spacing.three,
+  },
+  coachSection: {
+    marginTop: Spacing.four,
   },
   opponentPreview: {
     backgroundColor: 'rgba(16, 39, 31, 0.06)',
